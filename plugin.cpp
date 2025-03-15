@@ -1,16 +1,10 @@
 #include <RE/Skyrim.h>
-#include <SKSE/SKSE.h>
+#include <SkyrimScripting/Entrypoint.h>
 
-extern "C" __declspec(dllexport) bool SKSEPlugin_Load(const SKSE::LoadInterface* a_skse) {
-    SKSE::Init(a_skse);
-
-    SKSE::GetMessagingInterface()->RegisterListener(
-        "SKSE",
-        [](SKSE::MessagingInterface::Message* a_msg) {
-            if (a_msg->type == SKSE::MessagingInterface::kDataLoaded)
-                RE::ConsoleLog::GetSingleton()->Print("'Choose Your Own Adventure' initialized.");
-        }
-    );
-
-    return true;
+SKSEPlugin_Init {
+    SKSE::GetMessagingInterface()->RegisterListener([](SKSE::MessagingInterface::Message* msg) {
+        if (msg->type == SKSE::MessagingInterface::kDataLoaded)
+            if (auto* consoleLog = RE::ConsoleLog::GetSingleton())
+                consoleLog->Print("Hello from Example using SkyrimScripting.Entrypoint!");
+    });
 }
